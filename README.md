@@ -20,15 +20,3 @@ Para integrar **DevModal.js** en cualquier proyecto HTML, incluye los siguientes
 
 <!-- Script antes del cierre de </body> -->
 <script src="js/devmodal.js"></script>
-
-## 📸 Capturas de Pantalla
-
-Vista de la interfaz principal:
-![Página principal](img/captura1.png)
-
-Vista del componente visual interactivo (DevModal abierto):
-![DevModal en acción](img/captura2.png)
-
----
-
-## 🎥 Video Promocional
