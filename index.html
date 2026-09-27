@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevModal.js - Componente Visual</title>
+    <link rel="stylesheet" href="css/devmodal.css">
+</head>
+<body>
+
+    <main class="demo-container">
+        <header class="demo-header">
+            <span class="badge">Librería JS Native</span>
+            <h1>DevModal.js</h1>
+            <p>Componente visual reutilizable tipo IDE para aplicaciones web de desarrollo.</p>
+        </header>
+
+        <section class="card-grid">
+            <div class="card" onclick="devModal.open({ title: 'perfil.md', content: '# Ingeniero en Sistemas\n\n- Especialidad: Desarrollo Web\n- Stack: JavaScript, HTML5, CSS3\n- Estado: Disponible para proyectos' })">
+                <span class="card-icon">📄</span>
+                <h3>Perfil Developer</h3>
+                <p>Muestra información en formato Markdown.</p>
+            </div>
+
+            <div class="card" onclick="devModal.open({ title: 'config.json', content: '{\n  &quot;server&quot;: &quot;localhost&quot;,\n  &quot;port&quot;: 8080,\n  &quot;status&quot;: &quot;active&quot;,\n  &quot;timeout&quot;: 3000\n}' })">
+                <span class="card-icon">⚙️</span>
+                <h3>Configuración JSON</h3>
+                <p>Estructura de respuesta de API.</p>
+            </div>
+
+            <div class="card" onclick="devModal.open({ title: 'system_error.log', content: 'CRITICAL ERROR: Exception in thread &quot;main&quot;\nNullPointerException at line 42\nStack trace: /src/app.js', theme: 'error' })">
+                <span class="card-icon">⚠️</span>
+                <h3>Log de Error</h3>
+                <p>Visualización de fallos con tema crítico.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/devmodal.js"></script>
+</body>
+</html>
