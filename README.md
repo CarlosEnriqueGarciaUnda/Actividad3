@@ -19,9 +19,16 @@ Para integrar **DevModal.js** en cualquier proyecto HTML, incluye los siguientes
 <link rel="stylesheet" href="css/devmodal.css">
 
 <!-- Script antes del cierre de </body> -->
-<script src="js/devmodal.js"></script>
+<script src="js/DevModal.js"></script>
+<<<<<<< HEAD
+=======
 
 ```
 ![Pagina Principal](img/captura1.png)
 ![DevModal en acción](img/captura2.png)
+<<<<<<< HEAD
 ---
+=======
+---
+>>>>>>> 8c7cecc (Corrigiendo cierre de codigo y rutas de imagenes)
+>>>>>>> 5ae31f3cda25cb78ac0ccc5d08418ba74232e35f
