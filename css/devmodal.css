@@ -22,16 +22,6 @@ body {
     text-align: center;
 }
 
-.badge {
-    background: #1e293b;
-    color: #38bdf8;
-    border: 1px solid #334155;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
 .demo-header h1 {
     font-size: 2.5rem;
     margin: 15px 0 10px;
@@ -63,15 +53,9 @@ body {
     border-color: #38bdf8;
 }
 
-.card-icon {
-    font-size: 28px;
-    display: block;
-    margin-bottom: 10px;
-}
-
 .card h3 {
     font-size: 18px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     color: #f1f5f9;
 }
 
@@ -80,7 +64,7 @@ body {
     color: #94a3b8;
 }
 
-
+/* Estilos del DevModal */
 .devmodal-overlay {
     position: fixed;
     top: 0;

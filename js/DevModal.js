@@ -1,92 +1,127 @@
 class DevModal {
     constructor() {
-        this.overlayId = 'devmodal-overlay';
-        this.currentContent = '';
-        this._buildDOM();
-        this._registerGlobalEvents();
+        this.init();
     }
 
-    _buildDOM() {
-        if (document.getElementById(this.overlayId)) return;
+    init() {
+        if (document.querySelector('.devmodal-overlay')) return;
 
-        const overlay = document.createElement('div');
-        overlay.id = this.overlayId;
-        overlay.className = 'devmodal-overlay';
-
-        overlay.innerHTML = `
-            <div class="devmodal-window" id="devmodal-window">
-                <div class="devmodal-header">
-                    <div class="devmodal-buttons">
-                        <span class="btn-close" id="devmodal-close" title="Cerrar"></span>
-                        <span class="btn-min"></span>
-                        <span class="btn-max"></span>
+        const modalHTML = `
+            <div class="devmodal-overlay" id="devmodal-overlay">
+                <div class="devmodal-window">
+                    <div class="devmodal-header">
+                        <div class="devmodal-buttons">
+                            <span class="btn-close" id="devmodal-close"></span>
+                            <span class="btn-min"></span>
+                            <span class="btn-max"></span>
+                        </div>
+                        <span class="devmodal-title" id="devmodal-title">document.txt</span>
+                        <button class="btn-copy" id="devmodal-copy">Copiar</button>
                     </div>
-                    <div class="devmodal-title" id="devmodal-title">archivo.txt</div>
-                    <button class="btn-copy" id="devmodal-copy" title="Copiar código">📋 Copiar</button>
-                </div>
-                <div class="devmodal-body">
-                    <div class="devmodal-lines" id="devmodal-lines">1</div>
-                    <div class="devmodal-content" id="devmodal-content"></div>
+                    <div class="devmodal-body" id="devmodal-body-container">
+                        <div class="devmodal-lines" id="devmodal-lines">1</div>
+                        <div class="devmodal-content" id="devmodal-content"></div>
+                    </div>
                 </div>
             </div>
         `;
 
-        document.body.appendChild(overlay);
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-        document.getElementById('devmodal-close').addEventListener('click', () => this.close());
-        document.getElementById('devmodal-copy').addEventListener('click', () => this._copyToClipboard());
-        
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) this.close();
-        });
+        this.overlay = document.getElementById('devmodal-overlay');
+        this.title = document.getElementById('devmodal-title');
+        this.lines = document.getElementById('devmodal-lines');
+        this.content = document.getElementById('devmodal-content');
+        this.bodyContainer = document.getElementById('devmodal-body-container');
+        this.closeBtn = document.getElementById('devmodal-close');
+        this.copyBtn = document.getElementById('devmodal-copy');
+
+        this.bindEvents();
     }
 
-    // Escucha eventos globales como presionar la tecla 'Escape'
-    _registerGlobalEvents() {
+    bindEvents() {
+        this.closeBtn.addEventListener('click', () => this.close());
+        this.overlay.addEventListener('click', (e) => {
+            if (e.target === this.overlay) this.close();
+        });
+
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.close();
+            if (e.key === 'Escape' && this.overlay.classList.contains('active')) {
+                this.close();
+            }
+        });
+
+        this.copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(this.content.textContent).then(() => {
+                const originalText = this.copyBtn.textContent;
+                this.copyBtn.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    this.copyBtn.textContent = originalText;
+                }, 1500);
+            });
         });
     }
 
-    // Funcion interna para copiar el contenido al portapapeles
-    _copyToClipboard() {
-        navigator.clipboard.writeText(this.currentContent).then(() => {
-            const copyBtn = document.getElementById('devmodal-copy');
-            copyBtn.innerText = '✅ ¡Copiado!';
-            setTimeout(() => { copyBtn.innerText = '📋 Copiar'; }, 2000);
-        });
-    }
+    open(options = {}) {
+        const titleText = options.title || 'document.txt';
+        const contentText = options.content || '';
+        const theme = options.theme || 'default';
 
-    _generateLineNumbers(text) {
-        const lineCount = text.split('\n').length;
+        this.title.textContent = titleText;
+        this.content.textContent = contentText;
+
+        this.bodyContainer.className = 'devmodal-body';
+        if (theme === 'error') {
+            this.bodyContainer.classList.add('devmodal-theme-error');
+        }
+
+        const lineCount = contentText.split('\n').length;
         let linesHTML = '';
         for (let i = 1; i <= lineCount; i++) {
-            linesHTML += `${i}\n`;
+            linesHTML += `${i}<br>`;
         }
-        return linesHTML;
-    }
+        this.lines.innerHTML = linesHTML;
 
-    // Metodo PÚBLICO para abrir el modal con parámetros
-    open({ title = 'archivo.txt', content = '', theme = 'default' }) {
-        this.currentContent = content;
-        const overlay = document.getElementById(this.overlayId);
-        const windowEl = document.getElementById('devmodal-window');
-
-        document.getElementById('devmodal-title').innerText = title;
-        document.getElementById('devmodal-content').innerText = content;
-        document.getElementById('devmodal-lines').innerText = this._generateLineNumbers(content);
-
-        // Aplicar clase de tema
-        windowEl.className = `devmodal-window devmodal-theme-${theme}`;
-
-        // Mostrar con animación
-        overlay.classList.add('active');
+        this.overlay.classList.add('active');
     }
 
     close() {
-        const overlay = document.getElementById(this.overlayId);
-        if (overlay) overlay.classList.remove('active');
+        this.overlay.classList.remove('active');
     }
 }
 
 const devModal = new DevModal();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cardPerfil = document.getElementById('card-perfil');
+    const cardJson = document.getElementById('card-json');
+    const cardError = document.getElementById('card-error');
+
+    if (cardPerfil) {
+        cardPerfil.addEventListener('click', () => {
+            devModal.open({
+                title: 'perfil.md',
+                content: '# Ingeniero en Sistemas\n\n- Especialidad: Desarrollo Web\n- Stack: JS, HTML, CSS\n- Estado: Activo'
+            });
+        });
+    }
+
+    if (cardJson) {
+        cardJson.addEventListener('click', () => {
+            devModal.open({
+                title: 'config.json',
+                content: '{\n  "status": 200,\n  "message": "Conexión exitosa",\n  "data": {\n    "usuario": "Carlos",\n    "rol": "Admin"\n  }\n}'
+            });
+        });
+    }
+
+    if (cardError) {
+        cardError.addEventListener('click', () => {
+            devModal.open({
+                title: 'system_error.log',
+                content: 'CRITICAL ERROR: Exception in thread "main"\nNullPointerException at line 42 in DevModal.js\nStack trace: ...',
+                theme: 'error'
+            });
+        });
+    }
+});
